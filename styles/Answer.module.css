@@ -1,0 +1,48 @@
+.answer {
+    display: flex;
+    min-width: 500px;
+    width: 80%;
+    height: 100px;
+    margin: 10px;
+}
+
+.letter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-right: 20px;
+    color: #fff;
+}
+
+.value {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.front {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 15px;
+
+    color: #000;
+    align-items: center;
+}
+
+.front,
+.back {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.contentWithAnswer{
+    position: relative;
+    display: flex;
+    flex: 1;
+}

@@ -7,7 +7,7 @@ export default class QuestionModel {
     #answers: AnswerModel[]
     #rightAnswer: boolean
 
-    constructor(id: number, statement: string, answers: AnswerModel[], rightAnswer: boolean) {
+    constructor(id: number, statement: string, answers: AnswerModel[], rightAnswer = false) {
         this.#id = id;
         this.#statement = statement;
         this.#answers = answers;
@@ -18,6 +18,7 @@ export default class QuestionModel {
     get statement() { return this.#statement }
     get answers() { return this.#answers }
     get rightAnswer() { return this.#rightAnswer }
+    get notAnswered() { return !this.answered }
     get answered() {
         for (let answer of this.#answers) {
             if (answer.revealed) return true

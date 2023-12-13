@@ -40,6 +40,11 @@ export default class QuestionModel {
         return new QuestionModel(this.#id, this.#statement, shuffledAnswers, this.#rightAnswer)
     }
 
+    static createFromObject(obj: QuestionModel): QuestionModel {
+        const answers = obj.answers.map(resp => AnswerModel.createFromObject(resp))
+        return new QuestionModel(obj.id, obj.statement, answers, obj.rightAnswer)
+    }
+
     toObject() {
         return {
             id: this.#id,

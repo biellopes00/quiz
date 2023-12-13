@@ -1,22 +1,18 @@
 
 import Quiz from "@/components/Quiz";
-import AnswerModel from "@/model/answer";
 import QuestionModel from "@/model/question";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 
-const testQuestion = new QuestionModel(1, 'melhor cor', [
-  AnswerModel.wrong('verde'),
-  AnswerModel.wrong('preto'),
-  AnswerModel.wrong('azul'),
-  AnswerModel.right('roxo')
-])
 
 const BASE_URL = 'http://localhost:3000/api'
-export default function Home() {
 
+export default function Home() {
+  const router = useRouter();
   const [questionsId, setQuestionsId] = useState<number[]>([])
-  const [question, setQuestion] = useState(testQuestion)
+  const [question, setQuestion] = useState<QuestionModel>()
+  const [rightAnswers, setRightAnswers] = useState<number>(0)
 
   async function loadingIdQuiz() {
     const resp = await fetch(`${BASE_URL}/quiz`)
@@ -26,37 +22,57 @@ export default function Home() {
 
   async function loadingQuestion(questionId: number) {
     const resp = await fetch(`${BASE_URL}/questions/${questionId}`)
-    const questionsId = await resp.json()
-    setQuestionsId(questionsId)
+    const json = await resp.json()
+    const newQuestion = QuestionModel.createFromObject(json)
+    setQuestion(newQuestion)
   }
 
   useEffect(() => {
     loadingIdQuiz()
   }, [])
 
-  function questionAnswered(question: QuestionModel) {
+  useEffect(() => {
+    questionsId.length > 0 && loadingQuestion(questionsId[0])
+  }, [questionsId])
+
+  function questionAnswered(questionAnswered: QuestionModel) {
+    setQuestion(questionAnswered)
+    const right = questionAnswered.rightAnswer
+    setRightAnswers(rightAnswers + (right ? 1 : 0))
+  }
+
+  function nextQuestionId() {
+    const nextIndex = questionsId.indexOf(question.id) + 1
+    return questionsId[nextIndex]
 
   }
 
   function nextStep() {
+    const nextId = nextQuestionId()
+    nextId ? nextQuestion(nextId) : finish()
+  }
+
+  function nextQuestion(nextId: number) {
+    loadingQuestion(nextId)
+  }
+
+  function finish() {
+    router.push({
+      pathname: "/result",
+      query: {
+        total: questionsId.length,
+        right: rightAnswers
+      }
+
+    })
 
   }
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-    }}>
-      <Quiz
-        question={question}
-        lastQuestion={false}
-        questionAnswered={questionAnswered}
-        nextStep={nextStep}
-      />
 
-    </div>
-  )
-
+  return question ?
+    <Quiz
+      question={question}
+      lastQuestion={nextQuestionId() === undefined}
+      questionAnswered={questionAnswered}
+      nextStep={nextStep} />
+    : false
 }

@@ -24,7 +24,9 @@ export default class AnswerModel {
     reveal() {
         return new AnswerModel(this.#value, this.#right, true)
     }
-
+    static createFromObject(obj: AnswerModel): AnswerModel {
+        return new AnswerModel(obj.value, obj.right, obj.revealed)
+    }
     toObject() {
         return {
             value: this.#value,

@@ -42,9 +42,8 @@ export default function Home() {
   }
 
   function nextQuestionId() {
-    const nextIndex = questionsId.indexOf(question.id) + 1
-    return questionsId[nextIndex]
-
+    const nextIndex = questionsId.indexOf(question?.id || -1) + 1 // Use -1 como valor padrão se question for undefined
+    return nextIndex < questionsId.length ? questionsId[nextIndex] : undefined
   }
 
   function nextStep() {

@@ -4,6 +4,7 @@
     width: 80%;
     height: 100px;
     margin: 10px;
+    perspective: 1000px;
 }
 
 .letter {
@@ -31,8 +32,11 @@
     color: #000;
     align-items: center;
 }
+.back{
+    transform: rotateY(180deg);
+}
 
-.back > div {
+.back>div {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,7 +52,9 @@
 .wrong {
     background-color: #E44A4C;
 }
-.right .value, .wrong .value{
+
+.right .value,
+.wrong .value {
     font-size: 1.5rem;
 }
 
@@ -58,10 +64,18 @@
     display: flex;
     height: 100%;
     width: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .contentWithAnswer {
     position: relative;
     display: flex;
     flex: 1;
+    transition: transform 0.8s;
+    transform-style: preserve-3d ;
+}
+
+.answeredRevealed.contentWithAnswer {
+    transform: rotateY(180deg);
 }
